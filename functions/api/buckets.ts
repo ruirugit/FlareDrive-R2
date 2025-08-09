@@ -35,7 +35,10 @@ async function getCurrentBucket(context) {
   );
 
   return new Response(currentBucket, {
-    headers: { "cache-control": "max-age=604800" },
+    headers: { 
+      "cache-control": "max-age=604800",
+      "Access-Control-Allow-Origin": "*",
+    },
   });
 }
 
@@ -54,6 +57,11 @@ export async function onRequestGet(context) {
       `https://${env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
     );
   } catch (e) {
-    return new Response(e.toString(), { status: 500 });
+    return new Response(e.toString(), { 
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 }

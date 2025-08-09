@@ -6,11 +6,17 @@ export async function onRequest(context) {
     header.set("WWW-Authenticate",'Basic realm="需要登录"')
     return new Response("没有操作权限", {
         status: 401,
-        headers: header,
+        headers: {
+            "WWW-Authenticate": 'Basic realm="需要登录"',
+            "Access-Control-Allow-Origin": "*",
+        },
     });
    }
     
     return new Response("access", {
         status: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+        },
     });
 }

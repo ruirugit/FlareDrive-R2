@@ -23,9 +23,17 @@ export async function onRequestGet(context) {
       folders = folders.filter((folder) => folder !== "_$flaredrive$/");
 
     return new Response(JSON.stringify({ value: objKeys, folders }), {
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   } catch (e) {
-    return new Response(e.toString(), { status: 500 });
+    return new Response(e.toString(), { 
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 }

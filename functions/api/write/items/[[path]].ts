@@ -22,7 +22,13 @@ export async function onRequestPostCreateMultipart(context) {
     JSON.stringify({
       key: multipartUpload.key,
       uploadId: multipartUpload.uploadId,
-    })
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
   );
 }
 
@@ -40,10 +46,18 @@ export async function onRequestPostCompleteMultipart(context) {
   try {
     const object = await multipartUpload.complete(completeBody.parts);
     return new Response(null, {
-      headers: { etag: object.httpEtag },
+      headers: { 
+        etag: object.httpEtag,
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   } catch (error: any) {
-    return new Response(error.message, { status: 400 });
+    return new Response(error.message, { 
+      status: 400,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 }
 
@@ -59,7 +73,12 @@ export async function onRequestPost(context) {
     return onRequestPostCompleteMultipart(context);
   }
 
-  return new Response("Method not allowed", { status: 405 });
+  return new Response("Method not allowed", { 
+    status: 405,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }
 
 export async function onRequestPutMultipart(context) {
@@ -84,6 +103,7 @@ export async function onRequestPutMultipart(context) {
     headers: {
       "Content-Type": "application/json",
       etag: uploadedPart.etag,
+      "Access-Control-Allow-Origin": "*",
     },
   });
 }
@@ -127,7 +147,10 @@ export async function onRequestPut(context) {
   const obj = await bucket.put(path, content, { customMetadata });
   const { key, size, uploaded } = obj;
   return new Response(JSON.stringify({ key, size, uploaded }), {
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
   });
 }
 
@@ -144,5 +167,10 @@ export async function onRequestDelete(context) {
   if (!bucket) return notFound();
 
   await bucket.delete(path);
-  return new Response(null, { status: 204 });
+  return new Response(null, { 
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }
