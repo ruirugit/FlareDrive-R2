@@ -18,6 +18,8 @@ export async function onRequestGet(context) {
     headers.set("Cache-Control", "max-age=31536000");
   }
   headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
+  headers.set("Access-Control-Allow-Headers", "*");
 
   return new Response(response.body, {
     headers: headers,
